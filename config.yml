@@ -1,0 +1,16 @@
+mongo:
+  host: "mongodb"
+  port: "27017"
+  user: "mongodb"
+  password: "mongodb123!"
+  database: "planets"
+jwt:
+  secretKey: "7611488CD7E32F71934ADFF4982731113D5CA1A5D9BF34523F55A45EA8D2A758"
+web:
+  port: "9099"
+memcache:
+  host: "memcached"
+  port: "11211"
+jaeger:
+  host: "jaeger"
+  port: "6831"

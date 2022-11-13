@@ -1,0 +1,53 @@
+version: "3"
+
+services:
+  mongodb:
+    image: bitnami/mongodb:latest
+    hostname: mongodb
+    environment:
+      MONGODB_USERNAME: "mongodb"
+      MONGODB_PASSWORD: "mongodb123!"
+      MONGODB_DATABASE: "planets"
+      MONGODB_ROOT_PASSWORD: "mongodb123!"
+    ports:
+      - "27017:27017"
+    networks:
+      - planets-network
+
+  planets:
+    build:
+      context: .
+      dockerfile: planet.Dockerfile
+    container_name: planets
+    ports:
+      - "9099:9099"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+      - memcached
+      - jaeger    
+    networks:
+      - planets-network
+    command: >
+      sh -c "make run-seeds &&
+             make run-api"
+
+  memcached:
+    image: bitnami/memcached:latest  
+    ports:
+      - "11211:11211"
+    networks:
+      - planets-network
+
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+    networks:
+      - planets-network
+
+networks:
+  planets-network:
+    driver: bridge
